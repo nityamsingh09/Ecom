@@ -1,0 +1,167 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block content %}
+
+
+
+    <title>{{ vendor.name }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #ffffffff;
+            padding: 0px;
+        }
+
+     
+
+        .vendor-header {
+            text-align: center;
+        }
+
+        .vendor-header img {
+            width: 10%;
+            height: 10;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 100px;
+            left: 0px;
+            
+        }
+
+        .info-section {
+            margin-top: 20px;
+            padding: 20px;
+            background: #fafafa;
+            border-radius: 8px;
+        }
+
+        .info-section h2 {
+            margin-bottom: 15px;
+        }
+
+        .info-row {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .products {
+            margin-top: 30px;
+        }
+
+        .products h2 {
+            margin-bottom: 10px;
+        }
+
+        .product-item {
+            background: white;
+            padding: 10px;
+            border: 1px solid #ddd;
+            margin-bottom: 8px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="a4-page">
+
+    <!-- Vendor Image (A4 style width) -->
+    <div class="vendor-header">
+        <img src="{{ vendor.image.url }}" alt="{{ vendor.title}}">
+        <div>
+ {{ vendor.title }}
+        </div>
+       
+    </div>
+
+    <!-- Vendor Info -->
+    <div class="info-section">
+       
+
+        <div class="info-row"><strong>Address:</strong> {{ vendor.address }}</div>
+        <div class="info-row"><strong>Mobile No:</strong> {{ vendor.contact }}</div>
+        <div class="info-row">
+            <strong>Date Joined:</strong> {{ vendor.date|date:"F j, Y" }}
+        </div>
+        <div class="info-row">
+            <strong>Total Products:</strong> {{ vendor.product.count }}
+        </div>
+    </div>
+
+    <!-- Products List -->
+    <div class="products">
+        
+
+        {% if products %}
+               <div class="tf-grid-layout wrapper-shop tf-col-4" id="gridLayout">
+                        <!-- card product  -->
+
+                                                       {% for p in products %}
+                                <!-- card product  -->
+                                <div class="card-product wow fadeInUp">
+                                    <div class="card-product-wrapper">
+
+                                        <div style="
+                                                position:absolute;
+                                                top:10px;
+                                                left:10px;
+                                                background:#ff3b30;
+                                                color:#fff;
+                                                padding:5px 10px;
+                                                font-size:13px;
+                                                font-weight:bold;
+                                                border-radius:4px;
+                                                z-index:10;
+                                            ">
+                                                -{{ p.get_percentage | floatformat:0 }}% OFF
+                                            </div>
+
+                                        
+                                        <a href="product-detail.html" class="product-img">
+                                            <img class="lazyload img-product" data-src="images/products/womens/women-19.jpg" src="{{p.image.url}}" alt="image-product">
+                                            <img class="lazyload img-hover" data-src="images/products/womens/women-20.jpg" src="{{p.image.url}}" alt="image-product">
+                                        </a>
+                                        <div class="list-product-btn">
+                                            <a href="javascript:void(0);" class="box-icon wishlist btn-icon-action">
+                                                <span class="icon icon-heart"></span>
+                                                <span class="tooltip">Wishlist</span>
+                                            </a>
+                                            
+                                            <a href="#quickView" data-bs-toggle="modal" class="box-icon quickview tf-btn-loading">
+                                                <span class="icon icon-eye"></span>
+                                                <span class="tooltip">Quick View</span>
+                                            </a>
+                                        </div>
+                                        <div class="list-btn-main">
+                                            <a href="#shoppingCart" data-bs-toggle="modal" class="btn-main-product">Add To cart</a>
+                                        </div> 
+                                    </div>
+                                    
+                                    <div class="card-product-info">
+                                        <a href="product-detail.html" class="title link">{{p.title}}</a>
+                                        <div>
+                                        <span class ="font-small text-muted">By <a href="">{{p.vendor.title}}</a></span>
+                                    </div>
+                                        <span style="font-size:16px; font-weight:bold; margin-right:8px;">
+                                            ₹ {{p.price}}
+                                        </span>
+
+                                        <span style="font-size:14px; color:#777; text-decoration:line-through;">
+                                            ₹ {{p.old_price}}
+                                        </span>
+
+                                    
+                                    </div>
+                                </div>
+                                {% endfor %}
+         
+        {% else %}
+            <p>No products available.</p>
+        {% endif %}
+    </div>
+
+</div>
+
+
+{% endblock content %}

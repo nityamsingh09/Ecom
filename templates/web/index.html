@@ -1,0 +1,85 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block content %}
+
+<div>
+<h1>hello</h1>
+</div>
+     
+
+                    
+                    <div class="tf-grid-layout wrapper-shop tf-col-5" id="gridLayout">
+                        <!-- card product  -->
+
+                                                       {% for p in products %}
+                                <!-- card product  -->
+                                <div class="card-product wow fadeInUp">
+                                    <div class="card-product-wrapper">
+
+                                        <div style="
+                                                position:absolute;
+                                                top:10px;
+                                                left:10px;
+                                                background:#ff3b30;
+                                                color:#fff;
+                                                padding:5px 10px;
+                                                font-size:13px;
+                                                font-weight:bold;
+                                                border-radius:4px;
+                                                z-index:10;
+                                            ">
+                                                -{{ p.get_percentage | floatformat:0 }}% OFF
+                                            </div>
+
+                                        
+                                        <a href="{%url 'web:product-detail' p.pid%}" class="product-img">
+                                            <img class="lazyload img-product" data-src="images/products/womens/women-19.jpg" src="{{p.image.url}}" alt="image-product">
+                                            <img class="lazyload img-hover" data-src="images/products/womens/women-20.jpg" src="{{p.image.url}}" alt="image-product">
+                                        </a>
+                                      
+                                        <div class="list-btn-main">
+
+    
+
+    
+
+
+    <a href="{%url 'web:product-detail' p.pid%}" data-bs-toggle="modal" class="btn-main-product"
+       >
+       View Product
+    </a>
+
+</div>
+
+                                    </div>
+                                    
+                                    <div class="card-product-info">
+                                        <a href="product-detail.html" class="title link">{{p.title}}</a>
+                                        <div>
+                                        <span class ="font-small text-muted">By <a href="">{{p.vendor.title}}</a></span>
+                                    </div>
+                                        <span style="font-size:16px; font-weight:bold; margin-right:8px;">
+                                            ₹ {{p.price}}
+                                        </span>
+
+                                        <span style="font-size:14px; color:#777; text-decoration:line-through;">
+                                            ₹ {{p.old_price}}
+                                        </span>
+
+                                    
+                                    </div>
+                                </div>
+                                {% endfor %}
+                       
+                        
+                      
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /Section product -->
+        <!-- tf-has-purchased -->
+        
+        <!-- /tf-has-purchased -->
+       
+  {% endblock content%}

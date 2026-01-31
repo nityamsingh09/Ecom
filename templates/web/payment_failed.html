@@ -1,0 +1,84 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block content %}
+
+        <!-- tf-add-cart-success -->
+        <div class="tf-add-cart-success">
+            <div class="tf-add-cart-heading">
+                <h5>Shopping Cart</h5>
+                <i class="icon icon-close tf-add-cart-close"></i>
+            </div>
+            <div class="tf-add-cart-product">
+                <div class="image">
+                    <img class=" ls-is-cached lazyloaded" data-src="images/products/womens/women-3.jpg" alt="" src="images/products/womens/women-3.jpg">
+                </div>
+                <div class="content">
+                    <div class="text-title">
+                        <a class="link" href="product-detail.html">Biker-style leggings</a>
+                    </div>
+                    <div class="text-caption-1 text-secondary-2">Green, XS, Cotton</div>
+                    <div class="text-title">$68.00</div>
+                </div>
+            </div>
+            <a href="shopping-cart.html" class="tf-btn w-100 btn-fill radius-4"><span class="text text-btn-uppercase">View cart</span></a>
+        </div>
+        <!-- /tf-add-cart-success -->
+
+        <!-- page-title -->
+        <div class="page-title" style="background-image: url(images/section/page-title.jpg);">
+            <div class="container-full">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="heading text-center">Payment confirmation</h3>
+                        <ul class="breadcrumbs d-flex align-items-center justify-content-center">
+                            <li>
+                                <a class="link" href="{% url 'web:index' %}">Homepage</a>
+                            </li>
+                            <li>
+                                <i class="icon-arrRight"></i>
+                            </li>
+                            <li>
+                                <a class="link" href="{% url 'web:product-list' %}">Shop</a>
+                            </li>
+                            <li>
+                                <i class="icon-arrRight"></i>
+                            </li>
+                            <li>
+                                Payment Failed
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page-title -->
+
+        <!-- Payment confirmation -->
+        <section class="flat-spacing">
+            <div class="container">
+                <div class="row justify-content-center">
+                    <div class="col-lg-6">
+                        <h5 class="fw-5 mb_20">Payment failed</h5>
+                        <div class="tf-page-cart-checkout">
+                            
+                            <div class="d-flex align-items-center justify-content-between mb_15">
+                                <div class="fs-18">Order Id</div>
+                                <p>{{order_id}}</p>
+                            </div>
+                          
+    
+                            <div class="d-flex align-items-center justify-content-between mb_24">
+                                <div class="fs-22 fw-6">Payment Method</div>
+                                <span class="total-value">{{payment_method|upper }}</span>
+                            </div>
+                            <div class="d-flex gap-10">
+                                <a href="{% url 'web:index'%}" class="tf-btn w-100 btn-white radius-4 has-border"><span class="text">Go Home</span></a>
+                                <a href="{% url 'web:cart' %}" class="tf-btn w-100 btn-fill radius-4"><span class="text">Go Cart</span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+{% endblock content %}

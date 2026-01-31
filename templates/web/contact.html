@@ -1,0 +1,80 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+        <!-- page-title -->
+        <div class="page-title" style="background-image: url(images/section/page-title.jpg);">
+            <div class="container-full">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="heading text-center">Contact Us</h3>
+                        <ul class="breadcrumbs d-flex align-items-center justify-content-center">
+                            <li>
+                                <a class="link" href="index.html">Homepage</a>
+                            </li>
+                            <li>
+                                <i class="icon-arrRight"></i>
+                            </li>
+                            <li>
+                                <a class="link" href="#">Pages</a>
+                            </li>
+                            <li>
+                                <i class="icon-arrRight"></i>
+                            </li>
+                            <li>
+                                Contact Us
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /page-title -->
+
+      
+
+        <!-- Get In Touch -->
+        <section class="flat-spacing pt-0">
+            <div class="container">
+                <div class="heading-section text-center">
+                    <h3 class="heading">Get In Touch</h3>
+                    <p class="subheading">Use the form below to get in touch with the sales team</p>
+                </div>
+                <h4 id="message-response" class="text-center text-success"></h4>
+                <form id="contact-form-ajax" action="" method="post" class="form-leave-comment">
+                    {% csrf_token %}
+                    <div class="wrap">
+                        <div class="cols">
+                            <fieldset class="">
+                                <input class="" type="text" placeholder="Your Name*" name="full_name" id="full_name" tabindex="2" value="" aria-required="true" required="">
+                            </fieldset>
+                            <fieldset class="">
+                                <input class="" type="email" placeholder="Your Email*" name="email" id="email" tabindex="2" value="" aria-required="true" required="">
+                            </fieldset>
+                        </div>
+                        <div class="cols">
+                            <fieldset class="">
+                                <input class="" type="tel" placeholder="Your Number*" name="telephone" id="phone" tabindex="2" value="" aria-required="true" required="">
+                            </fieldset>
+                            <fieldset class="">
+                                <input class="" type="text" placeholder="Subject*" name="subject" id="subject" tabindex="2" value="" aria-required="true" required="">
+                            </fieldset>
+                        </div>
+                        <fieldset class="">
+                            <textarea name="message" id="message" rows="4" placeholder="Your Message*" tabindex="2" aria-required="true" required=""></textarea>
+                        </fieldset>
+                    </div>
+                    <div class="button-submit send-wrap">
+                        <button class="tf-btn btn-fill" type="submit">
+                            <span class="text text-button">Send message</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        <!-- /Get In Touch -->
+
+{% endblock content %}

@@ -1,0 +1,115 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block content %}
+
+
+        
+        <!-- page-title -->
+        <div class="page-title" style="background-image: url(images/section/page-title.jpg);">
+            <div class="container-full">
+                <div class="row">
+                    <div class="col-12">
+                        <h3 class="heading text-center">Vendor</h3>
+                        <ul class="breadcrumbs d-flex align-items-center justify-content-center">
+                            <li>
+                                <a class="link" href="{% url 'web:index' %}">Home</a>
+                            </li>
+                            <li>
+                                <i class="icon-arrRight"></i>
+                            </li>
+                            <li>
+                                Vendor
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <style>
+.vendor-card {
+    width: 260px;
+    border-radius: 10px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    padding: 15px;
+    text-align: center;
+    margin: 10px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.vendor-card img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 3px solid #eee;
+}
+
+.vendor-card h3 {
+    font-size: 20px;
+    margin: 5px 0;
+}
+
+.vendor-card .count {
+    background: #f3f3f3;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 14px;
+    display: inline-block;
+}
+
+.view-btn {
+    display: inline-block;
+    padding: 8px 15px;
+    background: #007bff;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+.view-btn:hover {
+    background: #0056b3;
+}
+</style>
+
+<div>
+    {% for v in vendors %}
+    <div class="vendor-card">
+        <img src="{{ v.image.url }}" alt="{{ v.title }}">
+
+        <h3>{{ v.title }}</h3>
+
+        <div class="count">
+            {{v.product.all.count}} products
+            
+        </div>
+        <div>
+
+        </div>
+        <span>{{v.address  }}</span>  <span>{{ v.contact}}</span>
+        <div>
+            
+                <span>Since {{v.date|date:"Y"}}</span>
+                <div>
+<a href="{% url 'web:vendor-detail' v.vid %}" class="view-btn">View Store</a>
+                </div>
+                 
+            </div>
+    </div>
+    
+    {% endfor %}
+
+</div>
+
+
+
+
+
+        {% endblock content %}

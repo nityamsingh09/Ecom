@@ -1,0 +1,312 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+    .profile-img-wrapper {
+    width: 120px;
+    height: 120px;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 2px solid #eee;
+}
+
+.profile-img-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;   /* 🔥 main fix */
+}
+
+</style>
+
+<!-- PAGE TITLE -->
+<div class="page-title">
+    <div class="container">
+        <h3 class="heading text-center">My Account</h3>
+    </div>
+</div>
+
+<section class="flat-spacing">
+    <div class="container">
+        <div class="my-account-wrap">
+
+            <!-- ================= LEFT SIDEBAR ================= -->
+            <div class="wrap-sidebar-account">
+                <div class="sidebar-account">
+                    
+                  <div class="account-avatar text-center">
+                    <div class="profile-img-wrapper">
+                        {% if profile.image %}
+                            <img src="{{ profile.image.url }}" alt="Profile Image">
+                        {% else %}
+                            <img src="https://static.vecteezy.com/system/resources/thumbnails/020/765/399/small/default-profile-account-unknown-icon-black-silhouette-free-vector.jpg" alt="Default Profile">
+                        {% endif %}
+                    </div>
+                    
+                    <h6 class="mt_10">{{ profile.full_name }}</h6>
+                    <div class="body-text-1">{{ request.user.email }}</div>
+                </div>
+
+
+                    <ul class="my-account-nav">
+                        <li>
+                            <a href="#" onclick="showSection('details', this)" class="my-account-nav-item active">
+                                Account Details
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showSection('orders', this)" class="my-account-nav-item">
+                                Your Orders
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showSection('dashboard', this)" class="my-account-nav-item">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="showSection('address', this)" class="my-account-nav-item">
+                                My Address
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{% url 'userauth:sign-out' %}" class="my-account-nav-item text-danger">
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+
+                </div>
+            </div>
+
+            <!-- ================= RIGHT CONTENT ================= -->
+            <div class="my-account-content">
+
+                <!-- ===== ACCOUNT DETAILS ===== -->
+                <div id="details" class="account-section">
+                    <h5 class="mb_20">Account Details</h5>
+
+                    <div style="border:1px solid #eee; padding:20px; border-radius:8px;">
+                        <div class="row mb_15">
+                            <div class="col-md-6">
+                                <p><b>Full Name</b></p>
+                                <p class="text-secondary">{{ profile.full_name }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <p><b>Email Address</b></p>
+                                <p class="text-secondary">{{ request.user.email }}</p>
+                            </div>
+                        </div>
+
+                        <div class="row mb_15">
+                            <div class="col-md-6">
+                                
+                                <p><b>Phone Number</b></p>
+                                <p class="text-secondary">+91 {{ profile.phone }}</p>
+                                
+                            </div>
+                            <div class="col-md-6">
+                                <p><b>Account Status</b></p>
+                                {% if profile.verified == True %}
+                                <span class="badge bg-success">Active</span>
+                                {% else %}
+                                <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </div>
+                            <a href="{% url 'userauth:profile-update' %}">
+                                <button  class="btn btn-success" type="submit" style="margin-top: 10px; width: 18%;">Edit Profile</button>
+                            </a>
+                            
+                        </div>
+
+              
+                    </div>
+                </div>
+
+                <!-- ===== ORDERS ===== -->
+                <div id="orders" class="account-section" style="display:none">
+                    <h5 class="mb_20">Your Orders</h5>
+
+                    <div style="overflow-x:auto;">
+                        <table border="1" width="100%" cellpadding="12" cellspacing="0">
+                            <thead style="background:#f7f7f7;">
+                                <tr>
+                                    <th>Order ID</th>
+                                    
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                    <th>Paid</th>
+                                    <th>Status</th>
+                                
+                                    
+                                </tr>
+                            </thead>
+
+                            <tbody>
+                                <!-- Example Order -->
+                                 {%for o in orders_list %}
+                                <tr>
+                                    <td>{{o.invoice_no}}</td>
+                                    
+                                    <td>{{o.order_date}}</td>
+                                    <td>{{o.price}}</td>
+                                    {% if o.paid_status == True %}
+                                    <td><i class="fas fa-check text-success"></i></td>
+                                    {% else %}
+                                    <td><i class="fas fa-times text-danger"></i></td>
+                                    {% endif %}
+                                    <td>
+                                        {% if o.product_status == "processing" %}
+                                            <span class="badge bg-warning">{{o.product_status|title}}</span>
+                                        {% elif o.product_status == "out_for_delivery" %}
+                                            <span class="badge bg-info">{{o.product_status|title}}</span>
+                                        {% elif o.product_status == "delivered" %}
+                                            <span class="badge bg-success">{{o.product_status|title}}</span>
+                                        {% elif o.prduct_status == "in_transt" %}
+                                            <span class="badge bg-warning text-dark">{{o.product_status|title}}</span>
+                                        {% elif o.product_status == "shipped" %}
+                                                <span class="badge bg-orange">{{ o.product_status|title }}</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">{{o.product_status|title}}</span>
+
+                                        {% endif %}
+                                    </td>
+                                    
+                                   
+                                </tr>
+                                {% endfor %}
+
+                                
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- ===== dashboard ===== -->
+                <div id="dashboard" class="account-section" style="display:none">
+                    <h5 class="mb_20">Dashboard</h5>
+
+                    <div>
+                        <canvas style ="height:200px;" id="myChart"></canvas>
+                    </div>
+                        
+                        
+                           
+                </div>
+                
+
+                
+
+                <!-- ===== ADDRESS ===== -->
+                <div id="address" class="account-section" style="display:none">
+
+                    <div>
+                    <form method="POST" action="{% url 'web:dashboard' %}">{% csrf_token %}
+                        
+                    <h5 class="mb_20">Add Address</h5>
+                    <div class="mb_15">
+                        <textarea name="address" class="form-control" placeholder="Enter your address here..." required></textarea>
+                    </div>
+                    <div>
+
+                    </div>
+                    <div class="mb_15">
+                        <input type="text" name="mobile" class="form-control mt_15" placeholder="Enter your mobile number" required>
+                    </div>
+                    <button type="submit" value="submit" name="submit">Add Address</button>
+
+                    </form>
+                </div>
+                <hr>
+                <br>
+                <div class="row">
+    {% for a in address %}
+    <div class="col-md-4 mb_20">
+    <div style="border:1px solid #eee; padding:20px; border-radius:8px;">
+        <h6>Address {{ forloop.counter }}</h6>
+
+        <p class="text-secondary">{{ a.address }}</p>
+        <p class="text-secondary">{{ a.mobile }}</p>
+        
+        {% if a.status %}
+            <i data-address-id="{{ a.id }}" class="fas fa-check text-success check{{a.id}} check" style="font-size:14px;"></i>
+            
+                <button data-address-id="{{ a.id }}" class="badge bg-light text-primary make-default-address button{{a.id}} action_btn" style="cursor:pointer; display: none;">
+                    Make default
+                </button>
+
+             
+            {% else %}
+            
+
+             <i data-address-id="{{ a.id }}" style="display: none;" class="fas fa-check text-success check{{a.id}} check" style="font-size:14px;"></i>
+             
+                <button data-address-id="{{ a.id }}" class="badge bg-light text-primary make-default-address button{{a.id}} action_btn" style="cursor:pointer;">
+                    Make default
+                </button>
+
+            
+           
+        {% endif %}
+
+    </div>
+</div>
+
+    
+    {% endfor %}
+</div>
+
+                </div>
+                
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ================= JS ================= -->
+<script>
+function showSection(id, el) {
+    event.preventDefault();
+
+    document.querySelectorAll('.account-section').forEach(sec => {
+        sec.style.display = 'none';
+    });
+
+    document.getElementById(id).style.display = 'block';
+
+    document.querySelectorAll('.my-account-nav-item').forEach(item => {
+        item.classList.remove('active');
+    });
+
+    el.classList.add('active');
+}
+</script>
+
+<script>
+  const ctx = document.getElementById('myChart');
+
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: {{month|safe}},
+      datasets: [{
+        label: '# Orders',
+        backgroundColor: 'rgb(59, 183, 126)',
+        borderColor: 'rgb(59, 183, 126)',
+        data: {{total_orders|safe}},
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>
+
+{% endblock content %}

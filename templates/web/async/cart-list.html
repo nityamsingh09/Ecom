@@ -1,0 +1,133 @@
+
+
+        <main class="main" id="cart-list">
+        <!-- page-title -->
+        <div class="page-title" style="background-image: url(images/section/page-title.jpg);">
+            <div class="container">
+                <h3 class="heading text-center">Shopping Cart</h3>
+                <ul class="breadcrumbs d-flex align-items-center justify-content-center">
+                    <li><a class="link" href="{% url 'web:index' %}">Homepage</a></li>
+                    <li><i class="icon-arrRight"></i></li>
+                    <li><a class="link" href="{% url 'web:product-list'%}">Shop</a></li>
+                    <li><i class="icon-arrRight"></i></li>
+                    <li>Shopping Cart</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /page-title -->
+        <!-- Section cart -->
+        <section class="flat-spacing">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-8">
+                        
+                        <form>
+                            <table class="tf-table-page-cart">
+                                <thead>
+                                    <tr>
+                                        <th>Products</th>
+                                        <th>Color</th>
+                                        <th>Size</th>
+                                        <th>Price</th>
+                                        <th>Quantity</th>
+                                        <th>Total Price</th>
+                                        <th>Remove</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for product_id, item in cart_data.items  %}
+                                    <tr class="tf-cart-item file-delete">
+                                        <td class="tf-cart-item_product">
+                                            <a href="{% url 'web:product-detail' item.pid%}" class="img-box">
+                                                <img src="{{ item.image }}" alt="product">
+                                                <span><a href="{% url 'web:product-detail' item.pid%}" class="cart-title link">{{item.title}}</a></span>
+                                            </a>
+                                            <div class="cart-info">
+                                                
+                                                
+                                            </div>
+                                        </td>
+                                       
+                                        <td data-cart-title="Price" class="tf-cart-item_price text-center">
+                                            <div class="cart-price text-button price-on-sale">{{item.color}}</div>
+                                        </td>
+                                        <td data-cart-title="Price" class="tf-cart-item_price text-center">
+                                            <div class="cart-price text-button price-on-sale">{{item.size}}</div>
+                                        </td>
+                                        <td data-cart-title="Price" class="tf-cart-item_price text-center">
+                                            <div class="cart-price text-button price-on-sale">{{item.price|floatformat:2}}</div>
+                                        </td>
+                                        <td data-cart-title="Quantity" class="tf-cart-item_price text-center">
+                                            <div class="cart-price text-button price-on-sale">{{item.qty}}</div>
+                                        </td>
+                                        
+                                        <td data-cart-title="Total" class="tf-cart-item_total text-center">
+                                            <div class="cart-total text-button total-price">{{item.item_total|floatformat:2}}</div>
+                                       <td data-cart-title="Remove" class="remove-cart">
+                                            <button 
+                                                type="button"  
+                                                class="remove icon icon-close delete-product" 
+                                                data-product="{{ product_id }}">
+                                            </button>
+                                        </td>
+
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                            
+                           
+                        </form>
+                    </div>
+                    <div class="col-xl-4">
+                        <div class="fl-sidebar-cart">
+                            <div class="box-order bg-surface">
+                                <h5 class="title">Order Summary</h5>
+                                <div class="subtotal text-button d-flex justify-content-between align-items-center">
+                                    <span>Subtotal</span>
+                                    <span class="total">{{cart_total_amount|floatformat:2}}</span>
+                                </div>
+                                
+                                <div class="ship">
+                                    <span class="text-button">Shipping</span>
+                                    <div class="flex-grow-1">
+                                        <fieldset class="ship-item">
+                                            <input type="radio" name="ship-check" class="tf-check-rounded" id="free" checked>
+                                            <label for="free">
+                                                <span>Free Shipping</span>
+                                                <span class="price"></span>
+                                            </label>
+
+                                    </div>
+                                </div>
+                                <h5 class="total-order d-flex justify-content-between align-items-center">
+                                    <span>Total</span>
+                                    <span class="total">{{cart_total_amount|floatformat:2}}</span>
+                                </h5>
+                                {% if totalcartitems %}
+                                <div class="box-progress-checkout">
+                                    <fieldset class="check-agree">
+                                        
+                                        <input type="checkbox" id="check-agree" class="tf-check-rounded">
+                                        <label for="check-agree">
+                                            I agree with the <a href="term-of-use.html">terms and conditions</a>
+                                        </label>
+                                    </fieldset>
+                                    
+                                    <a href="checkout.html" class="tf-btn btn-reset">Process To Checkout</a>
+                                    
+                                    <p class="text-button text-center">Or continue shopping</p>
+                                </div>  
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        </main>
+        <!-- /Section cart -->
+        <!-- Recent product -->
+       
+        <!-- /Recent product -->
+       
+       

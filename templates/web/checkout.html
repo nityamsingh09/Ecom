@@ -1,0 +1,404 @@
+{% extends 'web/base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+    .payment-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.payment-option {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    border: 2px solid #e5e7eb;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    background: #fff;
+}
+
+.payment-option:hover {
+    border-color: #6366f1;
+    box-shadow: 0 6px 15px rgba(99, 102, 241, 0.15);
+}
+
+.payment-option input {
+    display: none;
+}
+
+/* Custom Radio */
+.custom-radio {
+    width: 20px;
+    height: 20px;
+    border: 2px solid #9ca3af;
+    border-radius: 50%;
+    position: relative;
+}
+
+.payment-option input:checked + .custom-radio {
+    border-color: #6366f1;
+}
+
+.payment-option input:checked + .custom-radio::after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background: #6366f1;
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.payment-text strong {
+    font-size: 15px;
+    color: #111827;
+}
+
+.payment-text p {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* Selected card */
+.payment-option input:checked ~ .payment-text {
+    color: #4f46e5;
+}
+
+.payment-option input:checked {
+    border-color: #6366f1;
+}
+
+</style>
+
+
+        
+        <!-- page-title -->
+        <div class="page-title" style="background-image: url(images/section/page-title.jpg);">
+            <div class="container">
+                <h3 class="heading text-center">Check Out</h3>
+                <ul class="breadcrumbs d-flex align-items-center justify-content-center">
+                    <li><a class="link" href="{% url  'web:index' %}">Homepage</a></li>
+                    <li><i class="icon-arrRight"></i></li>
+                    <li><a class="link" href="{% url 'web:product-list'%}">Shop</a></li>
+                    <li><i class="icon-arrRight"></i></li>
+                    <li><a href="{% url "web:cart"%}">View Cart</a></li>
+                    <li><i class="icon-arrRight"></i></li>
+                    <li>Checkout</li>
+                </ul>
+            </div>
+        </div>
+        <!-- /page-title -->
+        <!-- Section checkout -->
+        <section>
+            <div class="container">
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="flat-spacing tf-page-checkout">
+                            {% if not request.user.is_authenticated %}
+                            <div class="wrap">
+                                <div class="title-login">
+                                    <p>Already have an account?</p>
+                                    <a href="{% url 'userauth:sign-in' %}" class="text-button">Login here</a>
+                                </div>
+                                
+                            </div>
+                            {% endif %}
+                            <div class="wrap">
+                                <h5 class="title">Information</h5>
+                                <form id="checkout-form"  class="info-box" method="post">
+                                    {% csrf_token %}
+                                    <div class="grid-2">
+                                        <input type="text"  name="first_name"  value={{request.user.username}} placeholder="First Name*" required >
+                                        <input type="text" name="last_name" placeholder="Last Name*">
+                                    </div>
+
+                                    <div class="grid-2">
+                                        <input type="text" name="address" value={{active_address.address}} placeholder="Street,..." required>
+                                        <input type="text" name="city" placeholder="Town/City*" required>
+                                        
+                                    </div>
+                                    <div class="grid-2">
+                                        <input type="text" name="zip_code" placeholder="Postal Code*" required>
+                                        <input type="tel" name="mobile" value="+91 | {{active_address.mobile}} " placeholder="Phone Number*" required>
+                                    </div>
+                                    <div class="grid-2">
+                                        <div class="tf-select">
+                                            <select name="state" class="text-title" data-default="" required>
+                                                <option selected value="Choose State">Choose State</option>
+                                                <option value="California">California</option>
+                                                <option value="Alabama">Alabam</option>
+                                                <option value="Alaska">Alaska</option>
+                                                <option value="Arizona">Arizona</option>
+                                                <option value="Arkansas">Arkansas</option>
+                                                <option value="Florida">Florida</option>
+                                                <option value="Georgia">Georgia</option>
+                                                <option value="Hawaii">Hawaii</option>
+                                                <option value="Washington">Washington</option>
+                                                <option value="Texas">Texas</option>
+                                                <option value="Iowa">Iowa</option>
+                                                <option value="Nevada">Nevada</option>
+                                                <option value="Illinois">Illinois</option>
+                                            </select>
+                                        </div>
+                                        
+                                    </div>
+                                    
+                                </form>
+                            </div>
+                            <div class="wrap">
+                                <h5 class="title">Choose payment Option:</h5>
+                                <form class="form-payment">
+                  <div class="payment-box">
+
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="COD" checked>
+                        <span class="custom-radio"></span>
+                        <div class="payment-text">
+                            <strong>Cash On Delivery</strong>
+                            <p>Pay when product is delivered</p>
+                        </div>
+                    </label>
+
+                    <label class="payment-option">
+                        <input type="radio" name="payment_method" value="ONLINE">
+                        <span class="custom-radio"></span>
+                        <div class="payment-text">
+                            <strong>Pay Online</strong>
+                            <p>UPI / Debit / Credit Card / Net Banking</p>
+                        </div>
+                    </label>
+
+                </div>
+
+                                    {% if request.user.is_authenticated %}
+                                        <button id="rzp-button1" type="button" class="tf-btn btn-reset">Placed Order</button>
+                                    {% else %}
+                                        <a href="{% url 'userauth:sign-in' %}" class="tf-btn btn-reset">
+                                            Login to Continue
+                                        </a>
+                                    {% endif %}
+                                <br>
+                            {% if not request.user.is_authenticated %}
+                            <div class="wrap">
+                                <div class="title-login">
+                                    <p>Dont have an account?</p>
+                                    <a href="{% url 'userauth:sign-up' %}" class="text-button">Register here</a>
+                                </div>
+                                
+                            </div>
+                            {% endif %}
+
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-1">
+                        <div class="line-separation"></div>
+                    </div>
+                    <div class="col-xl-5">
+                        <div class="flat-spacing flat-sidebar-checkout">
+                            <div class="sidebar-checkout-content">
+                                <h5 class="title">Shopping Cart</h5>
+                                <div class="list-product">
+                                    {% for product_id, item in cart_data.items  %}
+                                    <div class="item-product">
+                                        <a href="{% url 'web:product-detail' item.pid%}" class="img-product">
+                                            <img src="{{item.image}}" alt="img-product">
+                                        </a>
+                                        <div class="content-box">
+                                            <div class="info">
+                                                <a href="{% url 'web:product-detail' item.pid%}" class="name-product link text-title">{{item.title}}</a>
+                                                <div class="variant text-caption-1 text-secondary"><span class="size">{{item.size}}</span>/<span class="color">{{item.color}}</span></div>
+                                            </div>
+                                            <div class="total-price text-button"><span class="count">{{item.qty}}</span>X<span class="price">{{item.price}}</span></div>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="sec-discount">
+                                    <div dir="ltr" class="swiper tf-sw-categories" data-preview="2.25" data-tablet="3" data-mobile-sm="2.5" data-mobile="1.2" data-space-lg="20" data-space-md="20" data-space="15" data-pagination="1" data-pagination-md="1" data-pagination-lg="1">
+                                        <div class="swiper-wrapper">
+                                            <div class="swiper-slide">
+                                                <div class="box-discount">
+                                                    <div class="discount-top">
+                                                        <div class="discount-off">
+                                                            <div class="text-caption-1">Discount</div>
+                                                            <span class="sale-off text-btn-uppercase">10% OFF</span>
+                                                        </div>
+                                                        <div class="discount-from">
+                                                            <p class="text-caption-1">For all orders <br> from 200$</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="discount-bot">
+                                                        <span class="text-btn-uppercase">Mo234231</span>
+                                                        <button class="tf-btn"><span class="text">Apply Code</span></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="swiper-slide">
+                                                <div class="box-discount active">
+                                                    <div class="discount-top">
+                                                        <div class="discount-off">
+                                                            <div class="text-caption-1">Discount</div>
+                                                            <span class="sale-off text-btn-uppercase">10% OFF</span>
+                                                        </div>
+                                                        <div class="discount-from">
+                                                            <p class="text-caption-1">For all orders <br> from 200$</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="discount-bot">
+                                                        <span class="text-btn-uppercase">Mo234231</span>
+                                                        <button class="tf-btn"><span class="text">Apply Code</span></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="swiper-slide">
+                                                <div class="box-discount">
+                                                    <div class="discount-top">
+                                                        <div class="discount-off">
+                                                            <div class="text-caption-1">Discount</div>
+                                                            <span class="sale-off text-btn-uppercase">10% OFF</span>
+                                                        </div>
+                                                        <div class="discount-from">
+                                                            <p class="text-caption-1">For all orders <br> from 200$</p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="discount-bot">
+                                                        <span class="text-btn-uppercase">Mo234231</span>
+                                                        <button class="tf-btn"><span class="text">Apply Code</span></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </div>
+                                    </div>
+                                    <div class="ip-discount-code">
+                                        <input type="text" placeholder="Add voucher discount">
+                                        <button class="tf-btn"><span class="text">Apply Code</span></button>
+                                    </div>
+                                    <p>Discount code is only used for orders with a total value of products over $500.00</p>  
+                                </div>
+                                <div class="sec-total-price">
+                                    <div class="top">
+                                        <div class="item d-flex align-items-center justify-content-between text-button">
+                                            <span>Shipping</span>
+                                            <span>Free</span>
+                                        </div>
+                                        <div class="item d-flex align-items-center justify-content-between text-button">
+                                            <span>Discounts</span>
+                                            <span>Applied</span>
+                                        </div>
+                                    </div>
+                                    <div class="bottom">
+                                        <h5 class="d-flex justify-content-between">
+                                            <span>Total</span>
+                                            <span class="total-price-checkout">{{cart_total_amount|floatformat:2}}</span>
+                                        </h5>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <!-- /Section checkout -->
+
+       
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+document.getElementById("rzp-button1").addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    // ✅ SHIPPING FORM
+    let form = document.getElementById("checkout-form");
+    if (!form) {
+        alert("Checkout form not found");
+        return;
+    }
+
+    let formData = new FormData(form);
+
+    // ✅ PAYMENT METHOD
+    let paymentMethod = document.querySelector(
+        'input[name="payment_method"]:checked'
+    ).value;
+
+    formData.append("payment_method", paymentMethod);
+
+    let response = await fetch("/create-payment/", {
+        method: "POST",
+        headers: {
+            "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: formData
+    });
+
+    let data = await response.json();
+
+    // 🔴 COD FLOW (NO RAZORPAY)
+    if (paymentMethod === "COD") {
+        if (data.status === "success") {
+            window.location.href = "/payment-success/";
+            alert("COD order placed successfully");
+
+
+        } else {
+            alert(data.error || "COD order failed");
+        }
+        return;
+    }
+
+    // 🟢 ONLINE PAYMENT FLOW
+    if (!data.key) {
+        alert("Payment initialization failed");
+        return;
+    }
+
+    var options = {
+        key: data.key,
+        amount: data.amount,
+        currency: "INR",
+        order_id: data.order_id,
+        name: "Nymph Store",
+
+        handler: function (response) {
+            window.location.href =
+                "/payment-success/?order_id=" +
+                data.order_id +
+                "&payment_id=" +
+                response.razorpay_payment_id;
+        },
+
+        modal: {
+            ondismiss: function () {
+                window.location.href =
+                    "/payment-failed/?order_id=" + data.order_id;
+            }
+        }
+    };
+
+    var rzp1 = new Razorpay(options);
+
+    rzp1.on("payment.failed", function () {
+        window.location.href =
+            "/payment-failed/?order_id=" + data.order_id;
+    });
+
+    rzp1.open();
+});
+</script>
+
+
+       
+
+
+
+{% endblock content%}

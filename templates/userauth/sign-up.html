@@ -1,0 +1,124 @@
+{% extends "web/base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Page Title -->
+<div class="page-title" style="background-image: url({% static 'images/section/page-title.jpg' %});">
+    <div class="container-full">
+        <div class="row">
+            <div class="col-12">
+                <h3 class="heading text-center">Create An Account</h3>
+                <ul class="breadcrumbs d-flex align-items-center justify-content-center">
+                    <li>
+                        <a class="link" href="{% url 'web:index' %}">Homepage</a>
+                    </li>
+                    <li><i class="icon-arrRight"></i></li>
+                    <li>Register</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- /page-title -->
+
+<!-- Register Section -->
+<section class="flat-spacing">
+    <div class="container flat-box">
+        <div class="login-wrap">
+            <div class="left">
+                <div class="heading">
+                    <h4>Register</h4>
+                    <p class="mb-30">Already have an account? <a href="{% url 'userauth:sign-in' %}">Login</a></p>
+                </div>
+
+                {% if form.errors %}
+                <div class="alert alert-danger">
+                    <strong>{{ form.errors }}</strong>
+                </div>
+                {% endif %}
+
+                {% if user.is_authenticated %}
+                    <div class="text-center my-4">
+                        <h5 class="text-success">You are already logged in as {{ user.username }} 🎉</h5>
+                        <a href="{% url 'web:index' %}" class="tf-btn btn-fill mt-3">
+                            <span class="text text-button">Go to Homepage</span>
+                        </a>
+                    </div>
+                {% else %}
+                    <!-- Django Registration Form -->
+                    <form method="POST" class="form-login form-has-password">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        <div class="wrap">
+
+                            <!-- Username -->
+                            <fieldset>
+                                {{ form.username }}
+                            </fieldset>
+
+                            <!-- Email -->
+                            <fieldset>
+                                {{ form.email }}
+                            </fieldset>
+
+                            <!-- Password -->
+                            <fieldset class="position-relative password-item">
+                                {{ form.password1 }}
+                            </fieldset>
+
+                            <!-- Confirm Password -->
+                            <fieldset class="position-relative password-item">
+                                {{ form.password2 }}
+                            </fieldset>
+
+                            <div class="d-flex align-items-center">
+                                <div class="tf-cart-checkbox">
+                                    <div class="tf-checkbox-wrapp">
+                                        <input type="checkbox" id="login-form_agree" name="agree_checkbox" checked>
+                                        <div><i class="icon-check"></i></div>
+                                    </div>
+                                    <label class="text-secondary-2" for="login-form_agree">
+                                        I agree to the&nbsp;
+                                    </label>
+                                </div>
+                                {% comment %} <a href="{% url 'web:terms' %}" title="Terms of Service">Terms of Use</a>
+                            </div> {% endcomment %}
+                        </div>
+
+                        <div class="button-submit">
+                            <button class="tf-btn btn-fill" type="submit">
+                                <span class="text text-button">Register</span>
+                            </button>
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+
+            <div class="right">
+                {% if user.is_authenticated %}
+                    <h4 class="mb_8">You are already logged in!</h4>
+                    <p class="text-secondary">
+                        You can continue shopping or manage your account.
+                    </p>
+                    <a href="{% url 'web:index' %}" class="tf-btn btn-fill">
+                        <span class="text text-button">Go to Homepage</span>
+                    </a>
+                     {% comment %} <a href="{% url 'userauth:logout' %}" class="tf-btn btn-outline mt-3">
+                        <span class="text text-button">Logout</span>
+                    </a>  {% endcomment %}
+                {% else %}
+                    {% comment %} <h4 class="mb_8">Already have an account?</h4>
+                    <p class="text-secondary">
+                        Please Login! {% endcomment %}
+                    {% comment %} </p>
+                     <a href="{% url 'userauth:sign-in' %}" class="tf-btn btn-fill">
+                        <span class="text text-button">Login</span>
+                    </a>  {% endcomment %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<!-- /Register Section -->
+
+{% endblock content %}
